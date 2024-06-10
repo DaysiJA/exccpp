@@ -1,0 +1,97 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+using namespace std;
+bool palabra(char c);
+string cifradocesar(const string& texto, int m);
+string descifradocesar(const string& textocifrado, int m, const
+vector<string>& palabrasClave);
+void cargarPalabrasClave(const string& rutaArchivo, vector<string>&
+palabrasClave);
+bool palabra(char c)
+{
+return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+}
+string cifradocesar(const string& texto, int m)
+{
+string resultado = "";
+for (char c : texto) {
+if (palabra(c)) {
+char base = (c >= 'A' && c <= 'Z') ? 'A' : 'a';
+resultado += ((c - base + m) % 26) + base;
+} else {
+resultado += c;
+}
+}
+return resultado;
+}
+string descifradocesar(const string& textocifrado, int m, const
+vector<string>& palabrasClave)
+{
+for (int i = 1; i <= 25; ++i) {
+string intentoDescifrado = cifradocesar(textocifrado, -i);
+for (const string& palabraClave : palabrasClave) {
+if (intentoDescifrado.find(palabraClave) != string::npos) {
+return intentoDescifrado + "\nfactor de desplazamiento: "
++ to_string(i);
+}
+}
+}
+return "";
+}
+void cargarPalabrasClave(const string& rutaArchivo, vector<string>&
+palabrasClave)
+{
+ifstream archivo(rutaArchivo);
+if (archivo.is_open()) {
+string palabra;
+while (getline(archivo, palabra)) {
+palabrasClave.resize(palabrasClave.size() + 1);
+palabrasClave[palabrasClave.size() - 1] = palabra;
+}
+archivo.close();
+}
+}
+int main()
+{
+int m;
+cout << "factor de desplazamiento entre 1 y 25: ";
+cin >> m;
+ifstream archivoentrada("C:\\Users\\User\\Desktop\\archivos
+c++\\cifradodecesar.txt");
+if (!archivoentrada.is_open()) {
+cerr << "error" << endl;
+return 1;
+}
+string textoplano;
+getline(archivoentrada, textoplano);
+archivoentrada.close();
+vector<string> palabrasClave;
+cargarPalabrasClave("C:\\Users\\User\\Desktop\\archivos
+c++\\palabraclavecifradocesar.txt", palabrasClave);
+string textocifrado = cifradocesar(textoplano, m);
+ofstream archivocifrado("C:\\Users\\User\\Desktop\\archivos
+c++\\cifradodecesar_cifrado.txt");
+if (!archivocifrado.is_open()) {
+cerr << "error con el archivo cifrado" << endl;
+return 1;
+}
+archivocifrado << textocifrado;
+archivocifrado.close();
+cout << " cifrado del texto en el archivo: mensaje_cifrado_cesar.txt"
+<< endl;
+string textodescifrado = descifradocesar(textocifrado, m,
+palabrasClave);
+ofstream archivodescifrado("C:\\Users\\User\\Desktop\\archivos
+c++\\cifradodecesar_descifrado.txt");
+if (!archivodescifrado.is_open()) {
+cerr << "error con el archivo de decifrado" << endl;
+return 1;
+}
+archivodescifrado << "Texto descifrado: " << textodescifrado << endl;
+archivodescifrado.close();
+cout << "descifrado del texto: en mensaje_decifrado_cesar.txt" <<
+endl;
+return 0;
+}
