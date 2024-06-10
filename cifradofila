@@ -1,0 +1,52 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+void mostrary(char M[][50], int f, int c) {
+for (int i = 0; i < f; ++i) {
+for (int j = 0; j < c; ++j) {
+cout << M[i][j] << " ";
+}
+cout << endl;
+}
+}
+string cifrar(string mensaje, int f) {
+string cifrado = "";
+int longitud = mensaje.length();
+int c = (longitud + f - 1) / f;
+char M[f][50];
+int in = 0;
+for (int j = 0; j < c; ++j) {
+for (int i = 0; i < f; ++i) {
+if (in < longitud)
+M[i][j] = mensaje[in++];
+else
+M[i][j] = ' ';
+}
+}
+cout << "Matriz:" << endl;
+mostrary(M, f, c);
+for (int i = 0; i < f; ++i) {
+for (int j = 0; j < c; ++j) {
+cifrado += M[i][j];
+}
+}
+return cifrado;
+}
+int main() {
+int f;
+cout << "cantidad de filas: ";
+cin >> f;
+ifstream archivo("C:\\Users\\User\\Desktop\\archivos
+c++\\transposicion.txt");
+if (!archivo.is_open()) {
+cout << "Error " << endl;
+return 1;
+}
+string mensaje;
+getline(archivo, mensaje);
+archivo.close();
+string cifrado = cifrar(mensaje, f);
+cout << "cifrado: " << cifrado << endl;
+return 0;
+}
