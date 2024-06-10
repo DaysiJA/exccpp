@@ -1,0 +1,51 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+void cifrarTransposicion(const string &p, string &par, string &impar) {
+int c = 0;
+for (int i = 0; i < p.size(); ++i) {
+if (p[i] != ' ') {
+++c;
+if (c % 2 == 1) {
+impar += p[i];
+} else {
+par += p[i];
+}
+}
+}
+}
+void descifrarTransposicion(const string &par, const string &impar,
+string &descifrado) {
+int m=0;
+int n=0;
+for (int i = 0; i < par.size() + impar.size(); ++i) {
+if (i % 2 == 0) {
+descifrado += impar[m];
+++m;
+} else {
+descifrado += par[n];
+++n;
+}
+}
+}
+int main() {
+string ruta = "C:\\Users\\User\\Desktop\\archivos
+c++\\cifradodetransposicion.txt";
+ifstream archivoEntrada(ruta);
+if (!archivoEntrada) {
+cerr << "Error " << ruta << endl;
+return 1;
+}
+string palabraOriginal;
+getline(archivoEntrada, palabraOriginal);
+string par, impar;
+cifrarTransposicion(palabraOriginal, par, impar);
+cout << "Cifrado: " << impar + " " + par << endl;
+string descifrado;
+descifrarTransposicion(par, impar, descifrado);
+cout << "Decifrado: " << descifrado << endl;
+archivoEntrada.close();
+return 0;
+}
+}
