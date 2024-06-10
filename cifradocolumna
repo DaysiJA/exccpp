@@ -1,0 +1,53 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+void mostrar(char M[][50], int filas, int columnas) {
+for (int i = 0; i < filas; ++i) {
+for (int j = 0; j < columnas; ++j) {
+cout << M[i][j] << " ";
+}
+cout << endl;
+}
+}
+string cifrarPorColumnas(string mensaje, int columnas) {
+int longitud = mensaje.length();
+int filas = (longitud + columnas - 1) / columnas;
+char M[filas][50];
+int indice = 0;
+for (int i = 0; i < filas; ++i) {
+for (int j = 0; j < columnas; ++j) {
+if (indice < longitud)
+M[i][j] = mensaje[indice++];
+else
+M[i][j] = ' ';
+}
+}
+cout << "Matriz:" << endl;
+mostrar(M, filas, columnas);
+string cifrado;
+for (int j = 0; j < columnas; ++j) {
+for (int i = 0; i < filas; ++i) {
+cifrado += M[i][j];
+}
+}
+return cifrado;
+}
+int main() {
+int columnas;
+cout << "numero de columnas: ";
+cin >> columnas;
+cin.ignore();
+ifstream archivo("C:\\Users\\User\\Desktop\\archivos
+c++\\transposicion2.txt");
+if (!archivo.is_open()) {
+cout << "Error " << endl;
+return 1;
+}
+string mensaje;
+getline(archivo, mensaje);
+archivo.close();
+string cifrado = cifrarPorColumnas(mensaje, columnas);
+cout << "Cifrado: " << cifrado << endl;
+return 0;
+}
